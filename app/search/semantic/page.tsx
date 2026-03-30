@@ -65,7 +65,7 @@ export default function SemanticSearchPage() {
                   <div className="text-lg font-semibold">{tool.name}</div>
                   <div className="mt-1 text-muted">{tool.tagline}</div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {tool.tags.slice(0, 4).map((tag) => (
+                    {tool.tags.slice(0, 4).map((tag: string) => (
                       <Pill key={tag} variant="soft">{tag}</Pill>
                     ))}
                   </div>
