@@ -42,3 +42,4 @@ Thumbs.db
 
 # Next.js auto-generated files
 next-env.d.ts
+*.tsbuildinfo
