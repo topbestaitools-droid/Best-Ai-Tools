@@ -1,44 +1,40 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+export const dynamic = "force-dynamic";
 
-const prisma = new PrismaClient();
+import { tools } from "@/lib/mock-tools";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'GET') {
-        const { searchQuery, tag } = req.query;
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("q")?.toLowerCase() || "";
+    const category = searchParams.get("category")?.toLowerCase() || "";
+    const limit = parseInt(searchParams.get("limit") || "50");
+    const offset = parseInt(searchParams.get("offset") || "0");
 
-        try {
-            const tools = await prisma.tool.findMany({
-                where: {
-                    AND: [
-                        { name: { contains: searchQuery as string, mode: 'insensitive' } },
-                        { tagline: { contains: searchQuery as string, mode: 'insensitive' } },
-                        tag ? { tags: { some: { name: tag as string } } } : {},
-                    ],
-                },
-                include: {
-                    reviews: true,
-                },
-            });
+    let filtered = tools;
 
-            const responseData = tools.map(tool => {
-                const averageRating = tool.reviews.length > 0 
-                    ? tool.reviews.reduce((sum, review) => sum + review.rating, 0) / tool.reviews.length 
-                    : 0;
-                return {
-                    ...tool,
-                    averageRating,
-                    reviewCount: tool.reviews.length,
-                };
-            });
-
-            res.status(200).json(responseData);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
-    } else {
-        res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+    if (query) {
+      filtered = filtered.filter((t) =>
+        (t.name + " " + t.tagline + " " + t.tags.join(" ")).toLowerCase().includes(query)
+      );
     }
+
+    if (category) {
+      filtered = filtered.filter((t) =>
+        t.tags.some((tag) => tag.toLowerCase().includes(category))
+      );
+    }
+
+    const paginated = filtered.slice(offset, offset + limit);
+
+    return Response.json({
+      success: true,
+      data: paginated,
+      total: filtered.length,
+      page: Math.floor(offset / limit) + 1,
+      limit,
+    });
+  } catch (error) {
+    console.error(error);
+    return Response.json({ success: false, error: "Internal Server Error" }, { status: 500 });
+  }
 }

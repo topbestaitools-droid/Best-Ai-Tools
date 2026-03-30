@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server';
 
-export async function GET(request) {
+export async function GET(request: Request) {
     // Dummy data for demonstration purposes
     const data = {
         revenue: 10000,  // total revenue generated
