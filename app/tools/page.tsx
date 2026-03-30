@@ -3,12 +3,17 @@ import Image from "next/image";
 import { tools } from "@/lib/mock-tools";
 import { Pill } from "@/components/ui/pill";
 
+export const metadata = {
+  title: "AI Tools — AIAdvisor.tools",
+  description: "Browse the best AI tools for every use case."
+};
+
 export default function ToolsPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h2 className="text-2xl font-semibold">Tools</h2>
-        <p className="text-muted">Browse AI tools. Next: Prisma integration.</p>
+        <h2 className="text-2xl font-semibold">AI Tools</h2>
+        <p className="text-muted">Browse the best AI tools for every use case.</p>
       </header>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -60,4 +65,3 @@ export default function ToolsPage() {
     </div>
   );
 }
-

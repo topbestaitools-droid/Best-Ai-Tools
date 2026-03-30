@@ -1,13 +1,25 @@
-export type Tool = {
+/** Simplified tool shape used by mock data and UI components (no db-generated fields). */
+export type MockTool = {
   slug: string;
   name: string;
   tagline: string;
   website: string;
   pricing: "Free" | "Freemium" | "Paid";
   tags: string[];
+  logoUrl?: string;
+  heroImageUrl?: string;
 };
 
-export const tools: Tool[] = [
+function clearbitLogo(website: string): string {
+  try {
+    const domain = new URL(website).hostname.replace(/^www\./, "");
+    return `https://logo.clearbit.com/${domain}`;
+  } catch {
+    return "";
+  }
+}
+
+const rawTools: Omit<MockTool, "logoUrl">[] = [
   {
     slug: "noted-ai",
     name: "Noted AI",
@@ -57,3 +69,8 @@ export const tools: Tool[] = [
     tags: ["writing", "marketing", "content"]
   }
 ];
+
+export const tools: MockTool[] = rawTools.map((t) => ({
+  ...t,
+  logoUrl: clearbitLogo(t.website)
+}));
