@@ -10,7 +10,7 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-semibold">1. Acceptance of Terms</h2>
           <p className="mt-2 text-muted">
-            By using aiadvisor.tools, you agree to these terms. If you do not agree, please do not use our service.
+            By using bestai-tools.com, you agree to these terms. If you do not agree, please do not use our service.
           </p>
         </div>
 
@@ -24,21 +24,21 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-semibold">3. Acceptable Use</h2>
           <p className="mt-2 text-muted">
-            You agree not to use aiadvisor.tools for illegal activities, spam, harassment, or to harm others. We reserve the right to terminate accounts that violate these terms.
+            You agree not to use bestai-tools.com for illegal activities, spam, harassment, or to harm others. We reserve the right to terminate accounts that violate these terms.
           </p>
         </div>
 
         <div>
           <h2 className="text-xl font-semibold">4. Intellectual Property</h2>
           <p className="mt-2 text-muted">
-            All content on aiadvisor.tools is owned by us or our content providers. You may not reproduce or distribute without permission.
+            All content on bestai-tools.com is owned by us or our content providers. You may not reproduce or distribute without permission.
           </p>
         </div>
 
         <div>
           <h2 className="text-xl font-semibold">5. Disclaimers</h2>
           <p className="mt-2 text-muted">
-            aiadvisor.tools is provided "as is" without warranties. We do not guarantee accuracy of tool reviews or recommendations.
+            bestai-tools.com is provided "as is" without warranties. We do not guarantee accuracy of tool reviews or recommendations.
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-semibold">8. Contact</h2>
           <p className="mt-2 text-muted">
-            Questions? Email us at <a href="mailto:legal@aiadvisor.tools" className="text-accent hover:underline">legal@aiadvisor.tools</a>
+            Questions? Email us at <a href="mailto:legal@bestai-tools.com" className="text-accent hover:underline">legal@bestai-tools.com</a>
           </p>
         </div>
       </section>

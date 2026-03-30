@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -6,11 +8,11 @@ export default function OfflinePage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center space-y-6">
         <div className="text-6xl">📡</div>
-        <h1 className="text-3xl font-semibold">You're Offline</h1>
+        <h1 className="text-3xl font-semibold">You&apos;re Offline</h1>
         <p className="text-muted">
-          It looks like you've lost your internet connection. Some features may be limited.
+          It looks like you&apos;ve lost your internet connection. Some features may be limited.
         </p>
-        
+
         <div className="rounded-2xl border border-border bg-panel p-4 space-y-2">
           <p className="text-sm text-muted">Available offline:</p>
           <ul className="text-left space-y-1 text-sm">
@@ -26,9 +28,13 @@ export default function OfflinePage() {
           <Link href="/">
             <Button className="w-full">Go Home</Button>
           </Link>
-          <button onClick={() => window.location.reload()} className="w-full">
-            <Button variant="secondary" className="w-full">Retry Connection</Button>
-          </button>
+          <Button
+            variant="secondary"
+            className="w-full"
+            onClick={() => window.location.reload()}
+          >
+            Retry Connection
+          </Button>
         </div>
       </div>
     </div>

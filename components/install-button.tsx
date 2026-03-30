@@ -22,7 +22,7 @@ export function InstallButton() {
     window.addEventListener("appinstalled", handleAppInstalled);
 
     // Check if already installed
-    if (window.navigator.standalone === true) {
+    if ((window.navigator as {standalone?: boolean}).standalone === true) {
       setIsInstalled(true);
     }
 
