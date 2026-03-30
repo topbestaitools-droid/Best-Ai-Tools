@@ -4,7 +4,31 @@ import { tools } from "@/lib/mock-tools";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
 
-export default function ToolDetailPage({ params }: { params: { slug: string } }) {
+type Props = { params: { slug: string } };
+
+export async function generateStaticParams() {
+  return tools.map((t) => ({ slug: t.slug }));
+}
+
+export async function generateMetadata({ params }: Props) {
+  const tool = tools.find((t) => t.slug === params.slug);
+  if (!tool) return {};
+  return {
+    title: `${tool.name} — AIAdvisor.tools`,
+    description: tool.tagline,
+    openGraph: {
+      images: [
+        {
+          url: `/api/og/tool?name=${encodeURIComponent(tool.name)}&tagline=${encodeURIComponent(tool.tagline)}&pricing=${encodeURIComponent(tool.pricing)}&tags=${encodeURIComponent(tool.tags.join(","))}`,
+          width: 1200,
+          height: 630
+        }
+      ]
+    }
+  };
+}
+
+export default function ToolDetailPage({ params }: Props) {
   const tool = tools.find((t) => t.slug === params.slug);
   if (!tool) return notFound();
 
@@ -21,14 +45,16 @@ export default function ToolDetailPage({ params }: { params: { slug: string } })
         <div
           className="pointer-events-none absolute -right-20 -top-24 h-80 w-80 rounded-full opacity-40"
           style={{
-            background: "radial-gradient(circle, rgba(124,92,255,0.6) 0%, transparent 70%)",
+            background:
+              "radial-gradient(circle, rgba(124,92,255,0.6) 0%, transparent 70%)",
             filter: "blur(50px)"
           }}
         />
         <div
           className="pointer-events-none absolute -bottom-20 -left-16 h-64 w-64 rounded-full opacity-30"
           style={{
-            background: "radial-gradient(circle, rgba(0,229,255,0.5) 0%, transparent 70%)",
+            background:
+              "radial-gradient(circle, rgba(0,229,255,0.5) 0%, transparent 70%)",
             filter: "blur(40px)"
           }}
         />
@@ -87,9 +113,16 @@ export default function ToolDetailPage({ params }: { params: { slug: string } })
           </div>
 
           {/* CTA */}
-          <div>
+          <div className="flex items-center gap-3">
             <a href={tool.website} target="_blank" rel="noreferrer">
               <Button>Visit website ↗</Button>
+            </a>
+            <a
+              href={`/api/og/tool?name=${encodeURIComponent(tool.name)}&tagline=${encodeURIComponent(tool.tagline)}&pricing=${encodeURIComponent(tool.pricing)}&tags=${encodeURIComponent(tool.tags.join(","))}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button variant="ghost">Share image ↗</Button>
             </a>
           </div>
         </div>

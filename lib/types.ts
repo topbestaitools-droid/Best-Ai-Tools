@@ -19,6 +19,8 @@ export interface Tool {
   website: string;
   pricing: "Free" | "Freemium" | "Paid";
   tags: string[];
+  logoUrl?: string;
+  heroImageUrl?: string;
   createdAt: Date;
   updatedAt: Date;
   reviews?: Review[];
