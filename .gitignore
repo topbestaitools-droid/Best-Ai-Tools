@@ -39,3 +39,6 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Next.js auto-generated files
+next-env.d.ts
