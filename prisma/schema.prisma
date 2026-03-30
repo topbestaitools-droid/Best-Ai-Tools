@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviews      Review[]
+  badges       Badge[]
+  achievements Achievement[]
+  points       Int      @default(0)
+  level        Int      @default(1)
+}
+
+model Tool {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  tagline     String   @default("")
+  description String?
+  website     String
+  pricing     String   @default("Free")
+  tags        String[]
+  category    String?
+  logoUrl     String?
+  rating      Float?
+  source      String?
+  importedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reviews     Review[]
+
+  @@index([source])
+  @@index([category])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  userId    String
+  toolId    String
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tool      Tool     @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@index([toolId])
+  @@index([userId])
+}
+
+model Badge {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  icon        String   @default("⭐")
+  createdAt   DateTime @default(now())
+
+  users       User[]
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  points      Int      @default(0)
+  icon        String   @default("🏆")
+  createdAt   DateTime @default(now())
+  unlockedAt  DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
