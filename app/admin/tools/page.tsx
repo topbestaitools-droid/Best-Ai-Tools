@@ -42,7 +42,7 @@ export default async function AdminToolsPage() {
             </tr>
           </thead>
           <tbody>
-            {tools.map((tool) => (
+            {tools.map((tool: Record<string, any>) => (
               <tr key={tool.id} className="border-b border-border/50 hover:bg-bg transition">
                 <td className="p-4 font-medium">{tool.name}</td>
                 <td className="p-4 text-sm">

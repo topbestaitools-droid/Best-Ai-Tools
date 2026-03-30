@@ -47,7 +47,7 @@ export default async function AdminUsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((u) => (
+            {users.map((u: Record<string, any>) => (
               <tr key={u.id} className="border-b border-border/50 hover:bg-bg transition">
                 <td className="p-4 font-medium">{u.name || "Anonymous"}</td>
                 <td className="p-4 text-sm text-muted">{u.email}</td>

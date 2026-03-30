@@ -54,9 +54,10 @@ export async function awardBadge(userId: string, badgeType: string) {
   });
 
   if (badge) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { badges: { connect: { id: badge.id } } }
+    await prisma.userBadge.upsert({
+      where: { userId_badgeId: { userId, badgeId: badge.id } },
+      create: { userId, badgeId: badge.id },
+      update: {}
     });
   }
 }

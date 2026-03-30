@@ -185,9 +185,12 @@ async function main() {
   console.log(`✅ Created ${reviews.length} reviews`);
 
   // Award badges to users
-  await prisma.user.update({
-    where: { id: users[0].id },
-    data: { badges: { connect: [{ id: badges[0].id }, { id: badges[1].id }] } }
+  await prisma.userBadge.createMany({
+    data: [
+      { userId: users[0].id, badgeId: badges[0].id },
+      { userId: users[0].id, badgeId: badges[1].id }
+    ],
+    skipDuplicates: true
   });
 
   console.log("✅ Awarded badges to users");

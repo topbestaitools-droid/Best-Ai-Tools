@@ -1,8 +1,9 @@
 import { withAuth } from "next-auth/middleware";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequestWithAuth } from "next-auth/middleware";
 
 export const middleware = withAuth(
-  function middleware(request: NextRequest) {
+  function middleware(request: NextRequestWithAuth) {
     // Admin route protection
     if (request.nextUrl.pathname.startsWith("/admin")) {
       const token = request.nextauth.token;

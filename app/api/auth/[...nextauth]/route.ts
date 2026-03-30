@@ -1,8 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions, type Session } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID || "",
@@ -34,9 +35,9 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        (session.user as Record<string, unknown>).id = token.id as string;
       }
       return session;
     }
