@@ -63,14 +63,13 @@ export async function GET(request: NextRequest) {
           }}
         />
 
-        {/* Subtle grid pattern overlay */}
+        {/* Subtle dot/noise overlay — rendered as a faint inner border ring */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage:
-              "linear-gradient(rgba(27,43,82,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(27,43,82,0.4) 1px, transparent 1px)",
-            backgroundSize: "60px 60px"
+            background:
+              "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(27,43,82,0.6) 0%, transparent 70%)"
           }}
         />
 
@@ -162,8 +161,9 @@ export async function GET(request: NextRequest) {
                 borderRadius: 3
               }}
             />
-            <div style={{ fontSize: 24, color: "#A9B6E6" }}>
-              <span style={{ color: "#00E5FF" }}>AI</span>Advisor
+            <div style={{ fontSize: 24, color: "#A9B6E6", display: "flex" }}>
+              <span style={{ color: "#00E5FF" }}>AI</span>
+              <span>Advisor</span>
               <span style={{ color: "#7C5CFF" }}>.tools</span>
             </div>
           </div>

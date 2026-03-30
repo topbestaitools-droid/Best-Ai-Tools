@@ -23,15 +23,17 @@ model User {
 }
 
 model Tool {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  name      String
-  tagline   String
-  website   String
-  pricing   String
-  tags      String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  tagline      String
+  website      String
+  pricing      String
+  tags         String[]
+  logoUrl      String?
+  heroImageUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   reviews   Review[]
 }
@@ -53,23 +55,23 @@ model Review {
 }
 
 model Badge {
-  id        String   @id @default(cuid())
-  name      String
+  id          String   @id @default(cuid())
+  name        String
   description String?
-  icon      String   @default("⭐")
-  createdAt DateTime @default(now())
+  icon        String   @default("⭐")
+  createdAt   DateTime @default(now())
 
   users     User[]
 }
 
 model Achievement {
-  id        String   @id @default(cuid())
-  name      String
+  id          String   @id @default(cuid())
+  name        String
   description String?
-  points    Int      @default(0)
-  icon      String   @default("🏆")
-  createdAt DateTime @default(now())
-  unlockedAt DateTime @default(now())
+  points      Int      @default(0)
+  icon        String   @default("🏆")
+  createdAt   DateTime @default(now())
+  unlockedAt  DateTime @default(now())
 
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
