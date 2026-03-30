@@ -1,13 +1,9 @@
 import Link from "next/link";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
     <div className="space-y-8">
-      <SiteHeader />
-
       <section className="rounded-2xl border border-border bg-panel p-8">
         <p className="text-muted">aiadvisor.tools</p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight">
@@ -37,8 +33,6 @@ export default function HomePage() {
           <div className="mt-1 text-sm text-muted">Reviews, lists, and discussions.</div>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
   );
 }
