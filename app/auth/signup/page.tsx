@@ -38,7 +38,7 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="rounded-2xl border border-border bg-panel p-8 max-w-md w-full">
         <h1 className="text-2xl font-semibold">Create Account</h1>
-        <p className="mt-1 text-muted">Join AIAdvisor.tools community</p>
+        <p className="mt-1 text-muted">Join BestAI-Tools community</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>

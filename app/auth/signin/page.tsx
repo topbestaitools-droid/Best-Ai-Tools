@@ -37,7 +37,7 @@ export default function SignInPage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="rounded-2xl border border-border bg-panel p-8 max-w-md w-full">
         <h1 className="text-2xl font-semibold">Sign In</h1>
-        <p className="mt-1 text-muted">Welcome to AIAdvisor.tools</p>
+        <p className="mt-1 text-muted">Welcome to BestAI-Tools</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>

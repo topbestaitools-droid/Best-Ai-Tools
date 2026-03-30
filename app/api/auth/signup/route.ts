@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     // Note: In production, store hashed password and persist to database
     // For now, return success with user data
     const user = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: crypto.randomUUID(),
       email,
       name: name || email.split("@")[0],
       createdAt: new Date().toISOString(),
