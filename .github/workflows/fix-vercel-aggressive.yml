@@ -1,0 +1,89 @@
+name: 🔨 Aggressive Vercel Fix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  aggressive-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 🗑️ Remove problematic vercel.json
+        run: |
+          rm -f vercel.json
+          
+      - name: 🆕 Create minimal vercel.json
+        run: |
+          cat > vercel.json << 'EOF'
+          {
+            "buildCommand": "npm run build",
+            "devCommand": "npm run dev",
+            "installCommand": "npm ci",
+            "framework": "nextjs"
+          }
+          EOF
+          cat vercel.json
+
+      - name: 🔧 Update next.config.js - MINIMAL
+        run: |
+          cat > next.config.js << 'EOF'
+          /** @type {import('next').NextConfig} */
+          const nextConfig = {
+            reactStrictMode: true,
+            swcMinify: true,
+            images: {
+              domains: ['logo.clearbit.com', 'www.google.com'],
+            },
+          }
+          module.exports = nextConfig
+          EOF
+          cat next.config.js
+
+      - name: 🔧 Remove .vercelignore (non serve)
+        run: |
+          rm -f .vercelignore
+
+      - name: ✅ List files
+        run: |
+          echo "=== Root files ==="
+          ls -la | grep -E "vercel|next|tsconfig"
+          echo ""
+          echo "=== API routes ==="
+          find src/app/api -name "route.ts" | head -10
+
+      - name: 🔧 Git config
+        run: |
+          git config --local user.email "bot@github.com"
+          git config --local user.name "Vercel Fix Bot"
+
+      - name: 📝 Commit
+        run: |
+          git add vercel.json next.config.js
+          git rm -f .vercelignore 2>/dev/null || true
+          git commit -m "🔨 Aggressive Vercel API Fix
+
+          - Remove complex vercel.json configuration
+          - Use minimal Next.js configuration
+          - Let Vercel auto-detect API routes
+          - Remove unnecessary .vercelignore
+          
+          This fixes: 'pattern api/**/*.ts doesn't match any Serverless Functions'
+          
+          Solution: Stop telling Vercel about functions, let it auto-detect them." || echo "No changes"
+
+      - name: 🚀 Push
+        run: |
+          git push origin main || echo "Already up to date"
+
+      - name: ✅ Success
+        run: |
+          echo "✅ Files updated!"
+          echo "🔄 Vercel will redeploy in 2-3 minutes"
+          echo "📍 Watch: https://vercel.com/dashboard"
