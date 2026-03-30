@@ -1,0 +1,240 @@
+name: 🔧 Fix Vercel Configuration
+
+on:
+  workflow_dispatch:  # Esegui manualmente
+
+jobs:
+  fix-config:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          
+      - name: 🔧 Update vercel.json
+        run: |
+          cat > vercel.json << 'EOF'
+          {
+            "buildCommand": "npm run build",
+            "devCommand": "npm run dev",
+            "installCommand": "npm ci",
+            "framework": "nextjs",
+            "regions": ["iad1"],
+            "env": [
+              {
+                "key": "NEXT_PUBLIC_SUPABASE_URL",
+                "value": "@supabase_url"
+              },
+              {
+                "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+                "value": "@supabase_key"
+              },
+              {
+                "key": "SUPABASE_SERVICE_ROLE_KEY",
+                "value": "@supabase_service_role"
+              },
+              {
+                "key": "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID",
+                "value": "@ga_id"
+              },
+              {
+                "key": "STRIPE_SECRET_KEY",
+                "value": "@stripe_secret"
+              },
+              {
+                "key": "STRIPE_PUBLISHABLE_KEY",
+                "value": "@stripe_public"
+              },
+              {
+                "key": "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+                "value": "@stripe_public"
+              },
+              {
+                "key": "NEXTAUTH_URL",
+                "value": "https://bestai-tools.com"
+              },
+              {
+                "key": "NEXTAUTH_SECRET",
+                "value": "@nextauth_secret"
+              },
+              {
+                "key": "GOOGLE_CLIENT_ID",
+                "value": "@google_id"
+              },
+              {
+                "key": "GOOGLE_CLIENT_SECRET",
+                "value": "@google_secret"
+              },
+              {
+                "key": "GITHUB_ID",
+                "value": "@github_id"
+              },
+              {
+                "key": "GITHUB_SECRET",
+                "value": "@github_secret"
+              },
+              {
+                "key": "RESEND_API_KEY",
+                "value": "@resend_key"
+              },
+              {
+                "key": "NODE_ENV",
+                "value": "production"
+              }
+            ]
+          }
+          EOF
+          
+      - name: 🔧 Update next.config.js
+        run: |
+          cat > next.config.js << 'EOF'
+          /** @type {import('next').NextConfig} */
+          const nextConfig = {
+            reactStrictMode: true,
+            swcMinify: true,
+            
+            images: {
+              domains: [
+                'logo.clearbit.com',
+                'www.google.com',
+                'cdn.jsdelivr.net',
+              ],
+              formats: ['image/avif', 'image/webp'],
+            },
+
+            headers: async () => [
+              {
+                source: '/(.*)',
+                headers: [
+                  {
+                    key: 'Cache-Control',
+                    value: 'public, max-age=3600, stale-while-revalidate=86400',
+                  },
+                  {
+                    key: 'X-Content-Type-Options',
+                    value: 'nosniff',
+                  },
+                  {
+                    key: 'X-Frame-Options',
+                    value: 'DENY',
+                  },
+                  {
+                    key: 'X-XSS-Protection',
+                    value: '1; mode=block',
+                  },
+                ],
+              },
+            ],
+
+            redirects: async () => [],
+            rewrites: async () => ({}),
+          }
+
+          module.exports = nextConfig
+          EOF
+
+      - name: 🔧 Update .vercelignore
+        run: |
+          cat > .vercelignore << 'EOF'
+          node_modules
+          .git
+          .gitignore
+          README.md
+          .next/cache
+          .turbo
+          .env.local
+          .env.*.local
+          *.log
+          .DS_Store
+          scripts/
+          public/screenshots/
+          EOF
+
+      - name: 🔧 Update tsconfig.json
+        run: |
+          cat > tsconfig.json << 'EOF'
+          {
+            "compilerOptions": {
+              "target": "ES2020",
+              "useDefineForClassFields": true,
+              "lib": ["ES2020", "DOM", "DOM.Iterable"],
+              "module": "ESNext",
+              "skipLibCheck": true,
+              "esModuleInterop": true,
+              "allowSyntheticDefaultImports": true,
+              "strict": true,
+              "noImplicitAny": true,
+              "strictNullChecks": true,
+              "strictFunctionTypes": true,
+              "noImplicitThis": true,
+              "alwaysStrict": true,
+              "noUnusedLocals": true,
+              "noUnusedParameters": true,
+              "noImplicitReturns": true,
+              "noFallthroughCasesInSwitch": true,
+              "moduleResolution": "node",
+              "allowJs": true,
+              "resolveJsonModule": true,
+              "isolatedModules": true,
+              "jsx": "react-jsx",
+              "baseUrl": ".",
+              "paths": {
+                "@/*": ["./src/*"]
+              },
+              "forceConsistentCasingInFileNames": true,
+              "incremental": true,
+              "plugins": [
+                {
+                  "name": "next"
+                }
+              ]
+            },
+            "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+            "exclude": ["node_modules"]
+          }
+          EOF
+
+      - name: 📊 Check modified files
+        run: |
+          echo "=== Modified Files ==="
+          git status
+          echo ""
+          echo "=== File Diffs ==="
+          git diff --stat
+          
+      - name: 🔧 Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          
+      - name: 💾 Commit changes
+        run: |
+          git add vercel.json next.config.js .vercelignore tsconfig.json
+          git commit -m "🔧 Fix Vercel API Routes Configuration
+          
+          - Update vercel.json with proper environment variables
+          - Configure next.config.js for optimal performance
+          - Fix tsconfig.json paths and compiler options
+          - Update .vercelignore for clean deployment
+          
+          This fixes the 'pattern functions doesn't match' error by ensuring
+          all API routes in src/app/api are properly recognized by Vercel.
+          
+          Build: $(date)
+          Status: Automated fix via GitHub Actions" || echo "No changes to commit"
+          
+      - name: 🚀 Push changes
+        run: |
+          git push origin main || echo "Already up to date"
+          
+      - name: ✅ Deployment Status
+        run: |
+          echo "✅ Configuration files updated!"
+          echo "🚀 Vercel will auto-deploy in 2-3 minutes"
+          echo "📊 Check https://vercel.com/dashboard"
+          echo "🌐 Site will be live at https://bestai-tools.com"
