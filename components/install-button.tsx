@@ -21,8 +21,8 @@ export function InstallButton() {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
-    // Check if already installed
-    if (window.navigator.standalone === true) {
+    // Check if already installed (iOS Safari adds standalone to navigator)
+    if ((window.navigator as any).standalone === true) {
       setIsInstalled(true);
     }
 

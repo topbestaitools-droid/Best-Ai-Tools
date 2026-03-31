@@ -4,16 +4,19 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     const result = await signIn("credentials", {
       email,
@@ -24,20 +27,22 @@ export default function SignInPage() {
     if (result?.ok) {
       router.push("/dashboard");
     } else {
-      alert("Invalid credentials");
+      setError("Invalid email or password");
     }
     setLoading(false);
   };
 
-  const handleGitHub = () => {
-    signIn("github", { callbackUrl: "/dashboard" });
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="rounded-2xl border border-border bg-panel p-8 max-w-md w-full">
+    <div className="flex min-h-[70vh] items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-panel p-8">
         <h1 className="text-2xl font-semibold">Sign In</h1>
-        <p className="mt-1 text-muted">Welcome to AIAdvisor.tools</p>
+        <p className="mt-1 text-muted">Welcome back to AIAdvisor.tools</p>
+
+        {error && (
+          <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
@@ -65,18 +70,32 @@ export default function SignInPage() {
           </div>
 
           <Button className="w-full" disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Signing in…" : "Sign In"}
           </Button>
         </form>
 
-        <div className="mt-4">
-          <Button className="w-full" variant="secondary" onClick={handleGitHub}>
+        <div className="mt-4 space-y-2">
+          <Button
+            className="w-full"
+            variant="secondary"
+            onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+          >
             Sign in with GitHub
+          </Button>
+          <Button
+            className="w-full"
+            variant="secondary"
+            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          >
+            Sign in with Google
           </Button>
         </div>
 
         <p className="mt-4 text-center text-sm text-muted">
-          Don't have an account? <a href="/auth/signup" className="text-accent hover:underline">Sign up</a>
+          Don&apos;t have an account?{" "}
+          <Link href="/auth/signup" className="text-accent hover:underline">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>

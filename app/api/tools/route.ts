@@ -1,44 +1,32 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import { tools, searchTools } from "@/lib/mock-tools";
 
-const prisma = new PrismaClient();
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const query = searchParams.get("q") || "";
+  const category = searchParams.get("category") || "";
+  const pricing = searchParams.get("pricing") || "";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "20", 10);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'GET') {
-        const { searchQuery, tag } = req.query;
+  let filtered = query ? searchTools(query) : tools;
 
-        try {
-            const tools = await prisma.tool.findMany({
-                where: {
-                    AND: [
-                        { name: { contains: searchQuery as string, mode: 'insensitive' } },
-                        { tagline: { contains: searchQuery as string, mode: 'insensitive' } },
-                        tag ? { tags: { some: { name: tag as string } } } : {},
-                    ],
-                },
-                include: {
-                    reviews: true,
-                },
-            });
+  if (category) {
+    filtered = filtered.filter((t) => t.category === category);
+  }
+  if (pricing) {
+    filtered = filtered.filter((t) => t.pricing === pricing);
+  }
 
-            const responseData = tools.map(tool => {
-                const averageRating = tool.reviews.length > 0 
-                    ? tool.reviews.reduce((sum, review) => sum + review.rating, 0) / tool.reviews.length 
-                    : 0;
-                return {
-                    ...tool,
-                    averageRating,
-                    reviewCount: tool.reviews.length,
-                };
-            });
+  const total = filtered.length;
+  const start = (page - 1) * limit;
+  const paginated = filtered.slice(start, start + limit);
 
-            res.status(200).json(responseData);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
-    } else {
-        res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
-    }
+  return Response.json({
+    success: true,
+    data: paginated,
+    total,
+    page,
+    limit,
+    pages: Math.ceil(total / limit),
+  });
 }
