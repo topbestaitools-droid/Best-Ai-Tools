@@ -10,7 +10,7 @@ export async function GET(req: Request) {
 
     // TODO: Fetch notifications from database
     // For now, return empty array
-    const notifications = [];
+    const notifications: unknown[] = [];
 
     return Response.json({
       success: true,

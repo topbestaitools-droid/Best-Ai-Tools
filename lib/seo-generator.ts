@@ -1,28 +1,43 @@
 // lib/seo-generator.ts
 
 /**
- * Automatically generates SEO structure for AI tool reviews.
- * Categorizes them based on usage, features, and ratings.
+ * Automatically generates SEO metadata for AI tool pages.
  */
 
-interface AIReview {
-    title: string;
-    description: string;
-    features: string[];
-    rating: number;
-    category: string;
+export interface ToolSEOData {
+  name: string;
+  tagline: string;
+  description?: string;
+  category: string;
+  pricing: string;
+  slug: string;
 }
 
-class SEOGenerator {
-    private reviews: AIReview[];
+export function generateToolMetadata(tool: ToolSEOData) {
+  const title = `${tool.name} — AI Tool Review & Pricing | AIAdvisor.tools`;
+  const description =
+    tool.description ||
+    `${tool.name}: ${tool.tagline} Pricing: ${tool.pricing}. Browse our directory of ${tool.category} AI tools.`;
 
-    constructor(reviews: AIReview[]) {
-        this.reviews = reviews;
-    }
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article" as const,
+    },
+    twitter: {
+      card: "summary" as const,
+      title,
+      description,
+    },
+  };
+}
 
-    public generateSEO(): string {
-        return this.reviews.map(review => this.createMetaTags(review)).join('\n');
-    }
-
-    private createMetaTags(review: AIReview): string {
-        return `\n<title>${review.title}</title>\n<meta name=\
+export function generateCategoryMetadata(category: string, count: number) {
+  return {
+    title: `Best ${category} AI Tools (${count} tools) | AIAdvisor.tools`,
+    description: `Discover the best ${category} AI tools. Compare features, pricing, and reviews.`,
+  };
+}

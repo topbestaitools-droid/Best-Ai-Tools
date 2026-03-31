@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { hash } from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
@@ -9,6 +8,13 @@ export async function POST(req: Request) {
     if (!email || !password) {
       return Response.json(
         { error: "Email and password required" },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 8) {
+      return Response.json(
+        { error: "Password must be at least 8 characters" },
         { status: 400 }
       );
     }
@@ -25,7 +31,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create user (TODO: store hashed password in DB schema)
+    // Create user (password hashing requires bcryptjs in production)
     const user = await prisma.user.create({
       data: {
         email,
@@ -33,7 +39,7 @@ export async function POST(req: Request) {
       }
     });
 
-    return Response.json({ user }, { status: 201 });
+    return Response.json({ user: { id: user.id, email: user.email, name: user.name } }, { status: 201 });
   } catch (error) {
     console.error(error);
     return Response.json(
