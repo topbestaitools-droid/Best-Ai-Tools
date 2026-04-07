@@ -13,7 +13,11 @@
     "db:seed": "node --require tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "import:awesome": "tsx scripts/import-awesome-ai-tools.ts",
+    "import:dedupe": "tsx scripts/deduplicate-tools.ts",
+    "import:product-hunt": "tsx scripts/import-product-hunt.ts",
+    "import:github-trending": "tsx scripts/import-github-trending.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
