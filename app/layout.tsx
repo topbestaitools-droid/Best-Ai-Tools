@@ -5,37 +5,37 @@ import { SiteFooter } from "@/components/site-footer";
 import { structuredData } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "AIAdvisor.tools — Find the best AI tools",
-  description: "AI tools discovery, recommendations, and community reviews.",
-  metadataBase: new URL("https://aiadvisor.tools"),
+  title: "BestAI-Tools — Discover 3,200+ AI Tools",
+  description: "The most comprehensive AI tools directory. Find, compare, and discover the perfect AI tools for your workflow.",
+  metadataBase: new URL("https://bestai-tools.com"),
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "AIAdvisor.tools"
+    title: "BestAI-Tools"
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://aiadvisor.tools",
-    siteName: "AIAdvisor.tools",
-    title: "AIAdvisor.tools — Find the best AI tools",
-    description: "AI tools discovery, recommendations, and community reviews.",
+    url: "https://bestai-tools.com",
+    siteName: "BestAI-Tools",
+    title: "BestAI-Tools — Discover 3,200+ AI Tools",
+    description: "The most comprehensive AI tools directory. Find, compare, and discover the perfect AI tools for your workflow.",
     images: [
       {
-        url: "https://aiadvisor.tools/og-image.jpg",
+        url: "https://bestai-tools.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "AIAdvisor.tools"
+        alt: "BestAI-Tools"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    site: "@aiadvisor_tools",
-    title: "AIAdvisor.tools",
-    description: "AI tools discovery, recommendations, and community reviews.",
-    images: ["https://aiadvisor.tools/og-image.jpg"]
+    site: "@bestaitools",
+    title: "BestAI-Tools",
+    description: "The most comprehensive AI tools directory.",
+    images: ["https://bestai-tools.com/og-image.jpg"]
   },
   robots: {
     index: true,
@@ -64,12 +64,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
-        <link rel="canonical" href="https://aiadvisor.tools" />
+        <link rel="canonical" href="https://bestai-tools.com" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="AIAdvisor" />
+        <meta name="apple-mobile-web-app-title" content="BestAI-Tools" />
         <meta name="theme-color" content="#070A12" />
-        
+
         {/* Structured Data */}
         <script
           type="application/ld+json"
@@ -86,7 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <SiteFooter />
         </div>
-        
+
         {/* Service Worker */}
         <script
           dangerouslySetInnerHTML={{
